@@ -59,3 +59,16 @@ a {
 a:hover {
     color: indianred;
 }
+
+picture {
+    position: relative;
+    bottom: 250px;
+    right: 35%;
+
+}
+
+picture2 {
+    position: relative;
+   bottom: 255px;
+   right: 10%;
+}
