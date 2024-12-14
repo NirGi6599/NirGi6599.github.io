@@ -61,14 +61,17 @@ a:hover {
 }
 
 picture {
-    position: relative;
-    bottom: 250px;
-    right: 35%;
-
+    position: absolute;
+    display: inline-block;
+    bottom: 78%;
+    left: 20%;
+    
+    
 }
 
 picture2 {
-    position: relative;
-   bottom: 255px;
-   right: 10%;
+    position: absolute;
+    bottom: 78%;
+    right: 27%;
+   
 }
