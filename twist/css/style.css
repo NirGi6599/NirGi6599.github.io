@@ -22,9 +22,10 @@ h2 {
 
 section {
     position: relative;
-    display: inline-block;
+    display:  inline-block ;
     margin: 50px;
-    left: 30px;
+    left: 16%;
+    
 }
 
 section.html {  
@@ -63,15 +64,15 @@ a:hover {
 picture {
     position: absolute;
     display: inline-block;
-    bottom: 78%;
-    left: 20%;
+    bottom: 80%;
+    left: 30%;
     
     
 }
 
 picture2 {
     position: absolute;
-    bottom: 78%;
-    right: 27%;
+    bottom: 80%;
+    right: 35%;
    
 }
