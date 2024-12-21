@@ -29,11 +29,11 @@ section {
 }
 
 section.html {  
-    bottom: 50px
+    bottom: 50px;
 }
 
  section.css {  
-    bottom: 167px
+    bottom: 50px;
     }
  div.a {
      border: 5px solid hsl(0, 95%, 71%);
@@ -41,11 +41,11 @@ section.html {
      padding: 5px;
  }
   section.java {   
-    bottom: 167px
+    bottom: 167px;
    }
 
   section.links {
-    bottom: 2px
+    bottom: 2px;
     }
 
 p {
@@ -65,7 +65,7 @@ picture {
     position: absolute;
     display: inline-block;
     bottom: 80%;
-    left: 30%;
+    left: 23%;
     
     
 }
@@ -73,6 +73,6 @@ picture {
 picture2 {
     position: absolute;
     bottom: 80%;
-    right: 35%;
+    right: 30%;
    
 }
