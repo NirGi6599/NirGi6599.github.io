@@ -25,7 +25,16 @@ div.clickme {
     width: 50px;
     height: 50px;
     position: absolute;
-     background-color: green;
+     background-color: red;
      left: 150px;
+}
+
+div.restart {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+     background-color: green;
+     left: 230px;
+     display: none;
 }
 
