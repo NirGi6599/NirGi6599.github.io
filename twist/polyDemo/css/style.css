@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+}
+
+#game-container {
+    position: relative;
+    width: 800px;
+    height: 700px;
+    border: 2px solid #000;
+    overflow: hidden;
+    background-image: url('imgs/desert.png')
+}
+
+
+#sprite {
+    position: absolute;
+    width: 48px; /* Width of one frame */
+    height: 48px; /* Height of one frame */
+    background-repeat: no-repeat;
+    top: 190px; /* Initial vertical position */
+    left: 100px; /* Initial horizontal position */
+    /* Default to idle animation */
+    background-image: url('imgs/smoking_sheet.png');
+    animation: idle-animation 4s steps(10) infinite;
+    transform: scale(1.75);
+}
+
+button {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+@keyframes idle-animation {
+    0% 
+    {
+        background-position: 0;
+    }
+
+
+
+
+    100% {
+        background-position: -480px;
+    }
+    
+}
+
+@keyframes walk-animation {
+    0% {
+        background-position: 0;
+    }
+
+    100% {
+        background-position: -192px;
+    }
+    
+}
