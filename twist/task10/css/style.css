@@ -1,0 +1,106 @@
+button.a {
+    position: absolute;
+    left: 60%;
+    top: 30%;
+    font-size: 1em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #c13e56c0;
+    color: #fff;
+    cursor: pointer;   
+}
+
+button.b {
+    position: absolute;
+    left: 40%;
+    top: 30%;
+    font-size: 1em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #c13e56c0;
+    color: #fff;
+    cursor: pointer;   
+}
+button.c {
+    position: absolute;
+    left: 40%;
+    top: 70%;
+    font-size: 1em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #c13e56c0;
+    color: #fff;
+    cursor: pointer; 
+    display: none;  
+}
+button.d {
+    position: absolute;
+    left: 60%;
+    top: 70%;
+    font-size: 1em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #c13e56c0;
+    color: #fff;
+    cursor: pointer; 
+    display: none;  
+}
+
+button.a:hover {
+    background-color: rgba(135, 27, 36, 0.753);
+    transform: scale(1.1);
+}
+button.b:hover {
+    background-color: rgba(135, 27, 36, 0.753);
+    transform: scale(1.1);
+}
+button.c:hover {
+    background-color: rgba(135, 27, 36, 0.753);
+    transform: scale(1.1);
+}
+
+button.d:hover {
+    background-color: rgba(135, 27, 36, 0.753);
+    transform: scale(1.1);
+}
+
+div.popwin{
+position: absolute;
+left: 70%;
+top: 30%;
+background-color: #d69aa5bd;
+display: none;
+}
+
+div.popwin button {
+    position: absolute;
+    left: 90%;
+    top: 0px;
+    font-size: 1em;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #c13e56c0;
+    color: #fff;
+    cursor: pointer;   
+}
+
+div.popwin button:hover{
+    background-color: rgba(135, 27, 36, 0.753);
+    transform: scale(1.05);
+}
+
+div.box {
+	
+	width: 100px;
+    height: 100px;
+	margin: 10px;
+    background-image: url("../imgs/box.png");
+    position: absolute;
+	left:-150px;
+	top: 40%;
+}

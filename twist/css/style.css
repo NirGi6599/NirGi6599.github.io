@@ -41,11 +41,11 @@ section.html {
      padding: 5px;
  }
   section.java {   
-    bottom: 100px;
+    bottom: 20px;
    }
 
   section.links {
-    bottom: 2px;
+    bottom: -4px;
     }
 
 p {
