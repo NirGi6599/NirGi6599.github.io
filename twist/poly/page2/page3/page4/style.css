@@ -1,0 +1,102 @@
+/* Global styles */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+}
+
+body {
+    background: url('imgs/scene\ 2.png') no-repeat;
+    background-size: 100% 100%;
+    width: 800px;
+    height: 600px;
+}
+
+/* Poly sprite */
+.poly {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    bottom: 58%;
+    left: 28%;
+    background: url('imgs/smoking_sheet.png');
+    animation: idle 2.5s steps(10) infinite;
+    transition: left 1s ease-in-out, bottom 1s ease-in-out;
+    scale: 1.5;
+}
+
+/* Idle Animation (Smoking) */
+@keyframes idle {
+    0% { background-position: 0px; }
+    100% { background-position: -480px; }
+}
+
+/* Walking Animation */
+@keyframes walk {
+    0% { background-position: 0px; }
+    100% { background-position: -192px; }
+}
+
+.poly.walking {
+    background: url('imgs/walking_sheet.png');
+    animation: walk 1s steps(4) forwards;
+}
+
+/* Buttons */
+#buttons {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+
+/* Feedback message */
+#feedback {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    color: white;
+}
+
+/* Inventory text */
+.inventory-text {
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    font-size: 18px;
+    color: white;
+}
+
+#key2-inventory {
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    font-size: 18px;
+    color: white;
+}
+
+#key3-inventory {
+    position: absolute;
+    top: 20%;
+    left: 5%;
+    font-size: 18px;
+    color: white;
+}

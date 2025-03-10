@@ -1,0 +1,88 @@
+/* Fullscreen Background */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: url('imgs/sand.png') repeat; /* Tiled sand background */
+}
+
+body {
+    background: url('imgs/scene5.png') no-repeat;
+    background-size: 100% 100%;
+    width: 800px;
+    height: 600px;
+}
+
+
+/* Poly Sprite */
+.sprite {
+    position: absolute;
+    image-rendering: pixelated;
+}
+
+/* Poly Animations */
+.poly {
+    width: 48px;  /* Adjust based on sprite size */
+    height: 48px;
+    bottom: 40%; /* Adjust Poly's position on screen */
+    left: 49%;
+    scale: 1.5;
+    transition: all 3s ease-in-out; 
+}
+
+.poly.idle {
+    background: url('imgs/smoking_sheet.png');
+    animation: idle 2.5s steps(10) infinite;
+}
+
+.poly.walk {
+    background: url('imgs/walking_sheet.png');
+    animation: walk 0.8s steps(4) infinite;
+    transition: left 3s linear, top 3s linear;
+}
+
+@keyframes idle {
+    from { background-position: 0px; }
+    to { background-position: -480px; } /* Adjust for sprite width */
+}
+
+@keyframes walk {
+    from { background-position: 0px; }
+    to { background-position: -192px; }
+}
+
+/* Tumbleweed Animation */
+.tumbleweed {
+    width: 32px;
+    height: 32px;
+    bottom: 75%;
+    left: -50px;
+    background: url('imgs/tumbleweedsheet.png');
+    animation: tumbleweed-move 8s linear infinite, tumbleweed-spin 1s steps(4) infinite;
+    scale: 1.8;
+}
+
+@keyframes tumbleweed-move {
+    from { left: -50px; }
+    to { left: 110vw; }
+}
+
+@keyframes tumbleweed-spin {
+    from { background-position: 0px; }
+    to { background-position: -128px; } /* Adjust based on sprite width */
+}
+
+/* Button */
+#Leave {
+    position: absolute;
+    top: 28%;
+    left: 60%;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 3 - Bathroom</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background for the bathroom -->
+    <div id="background" class="background"></div>
+
+    <!-- Poly sprite -->
+    <div class="poly"></div>
+
+    <!-- Buttons for player actions -->
+    <div id="buttons">
+        <button id="look-under-carpet" onclick="lookUnderCarpet()">Look Under Carpet</button>
+        <button id="try-locker" onclick="tryLocker()">Try Locker</button>
+        <button id="open-door" onclick="openDoor()">Open Door</button>
+    </div>
+
+    <!-- Key item (hidden initially) -->
+    <div id="key1" class="item" style="display:none;"></div>
+
+    <!-- Password Input (Initially Hidden) -->
+    <div id="password-container" style="display:none;">
+        <input type="password" id="password-input" placeholder="Enter password">
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+
+    <!-- Feedback Message (Initially Hidden) -->
+    <div id="feedback" style="display:none;"></div>
+
+    <!-- Inventory text -->
+    <div id="inventory-text" class="inventory-text" style="display:none;">
+        You have Wooden key!
+    </div>
+
+    <!-- Key 2 in inventory -->
+    <div id="key2-inventory" class="inventory-text" style="display:none;">
+        You have Metal key!
+    </div>
+
+    <!-- Big key in inventory -->
+    <div id="key3-inventory" class="inventory-text" style="display:none;">
+        You have Big key! 
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 4 - Closet Room</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background for the closet room -->
+    <div id="background" class="background"></div>
+
+    <!-- Poly sprite -->
+    <div class="poly"></div>
+
+    <!-- Buttons for player actions -->
+    <div id="buttons">
+        <button id="open-closet1" onclick="openCloset(1)">Open Closet 1</button>
+        <button id="open-closet2" onclick="openCloset(2)">Open Closet 2</button>
+        <button id="open-closet3" onclick="openCloset(3)">Open Closet 3</button>
+        <button id="go-back" onclick="goBack()">Go Back</button>
+        <button id="go-outside" onclick="goOutside()">Go Outside</button>
+    </div>
+
+    <!-- Key item (hidden initially) -->
+   
+
+    <!-- Feedback Message (Initially Hidden) -->
+    <div id="feedback" style="display:none;"></div>
+
+    <!-- Inventory text -->
+    <div id="inventory-text" class="inventory-text" style="display:none;">
+        You have Wooden key!
+    </div>
+
+    <!-- Key 2 in inventory -->
+    <div id="key2-inventory" class="inventory-text" style="display:none;">
+        You have Metal key!
+    </div>
+
+    <!-- Big key in inventory -->
+    <div id="key3-inventory" class="inventory-text" style="display:none;">
+        You have Big key! 
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

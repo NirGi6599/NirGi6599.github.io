@@ -1,0 +1,95 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+}
+
+body {
+    background: url('imgs/scene\ 2.png') no-repeat;
+    background-size: 100% 100%;
+    width: 800px;
+    height: 600px;
+}
+
+/* Poly Sprite */
+.poly {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    bottom: 12%;
+    left: 52%;
+    background: url('imgs/smoking_sheet.png');
+    animation: idle 2.5s steps(10) infinite;
+    scale: 1.5;
+}
+
+@keyframes idle {
+    0% { background-position: 0px; }
+    100% { background-position: -480px; }
+}
+
+/* Captor (starts invisible behind Poly) */
+.captor {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    bottom: 9%;
+    left: 52%;
+    background: url('imgs/hammer\ strike.png'); /* Updated for the attack animation */
+    opacity: 0;
+    scale: 1.5;
+}
+
+/* Captor Attack Animation */
+@keyframes captor-hit-animation {
+    0% { opacity: 1; background-position: 0px; }
+    100% { opacity: 1; background-position: -192px; }
+}
+
+/* Blackout screen (triggered after hit) */
+.blackout {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 5;
+    opacity: 0;
+    animation: blackout-animation 1s forwards;
+}
+
+@keyframes blackout-animation {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Ouch Text and Button */
+#ouch-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 30px;
+    color: white;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 10;
+}
+
+#move-to-page3 {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transform: translateX(-50%);
+    display: none;
+    z-index: 10;
+}
