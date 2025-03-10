@@ -11,7 +11,7 @@ enterButton.addEventListener("click", () => {
     poly.style.bottom = "0%"; // Adjust to match door position
 
     setTimeout(() => {
-        window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // Move to the next page
+        window.location.href = "https://edenaycheh.github.io/finalProject/part09.html"; // Move to the next page
     }, 2000);
 });
 
