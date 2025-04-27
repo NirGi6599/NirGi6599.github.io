@@ -27,6 +27,9 @@
             margin-top: 1rem;
             /* display: none; */ /* Keep it visible with default message initially */
             border: 1px solid #d1d5db; /* Add a subtle border */
+             display: flex; /* Use flexbox for layout inside */
+             flex-direction: column;
+             justify-content: center;
         }
         .data-item {
             margin-bottom: 0.5rem;
@@ -122,6 +125,45 @@
              margin-top: 0.5rem;
          }
 
+        /* Styles for Mini Visualizations */
+         .mini-chart {
+             display: flex;
+             flex-direction: column;
+             margin-top: 1rem;
+             padding-top: 0.5rem;
+             border-top: 1px dashed #9ca3af; /* Separator */
+         }
+         .mini-bar-container {
+             display: flex;
+             align-items: center;
+             margin-bottom: 0.25rem;
+         }
+         .mini-bar-label {
+             font-size: 0.875rem;
+             width: 80px; /* Fixed width for labels */
+             flex-shrink: 0; /* Prevent shrinking */
+             color: #4b5563;
+         }
+         .mini-bar {
+             height: 15px;
+             background-color: #3b82f6; /* Blue */
+             transition: width 1s ease-in-out; /* Animation */
+             border-radius: 0.125rem;
+         }
+
+         .speed-indicator {
+             height: 20px;
+             width: 100%; /* Full width initially */
+             background-color: #9ca3af; /* Default gray */
+             border-radius: 0.25rem;
+             margin-top: 1rem;
+             transition: background-color 0.7s ease-in-out; /* Color transition */
+         }
+         .speed-indicator.slow { background-color: #ef4444; } /* Red */
+         .speed-indicator.medium { background-color: #f59e0b; } /* Orange */
+         .speed-indicator.fast { background-color: #22c55e; } /* Green */
+
+
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 p-4 md:p-8">
@@ -200,7 +242,11 @@
             </div>
 
             <div id="station-data" class="interactive-data-box">
-                <p>בחר תחנה מהרשימה למעלה כדי לראות את הנתונים.</p>
+                <div id="station-text-data">
+                     <p>בחר תחנה מהרשימה למעלה כדי לראות את הנתונים.</p>
+                </div>
+                 <div id="station-mini-chart" class="mini-chart hidden">
+                     </div>
             </div>
 
              <img src="p2.png" alt="גרף התפלגות תיקופים לפי שעות ותחנות" class="mx-auto my-8 rounded-md w-full max-w-xl">
@@ -246,7 +292,10 @@
             </div>
 
             <div id="segment-speed-data" class="interactive-data-box">
-                 <p>בחר מקטע מהרשימה למעלה כדי לראות את נתוני המהירות.</p>
+                 <div id="segment-text-data">
+                     <p>בחר מקטע מהרשימה למעלה כדי לראות את נתוני המהירות.</p>
+                 </div>
+                 <div id="speed-indicator" class="speed-indicator hidden"></div>
             </div>
 
             <img src="p3.png" alt="גרף מהירות הקו האדום לפי מקטעים" class="mx-auto my-8 rounded-md w-full max-w-xl">
@@ -467,6 +516,9 @@
         const stationSelect = document.getElementById('station-select');
         // Get the div where the data will be displayed
         const stationDataArea = document.getElementById('station-data');
+        const stationTextDataArea = document.getElementById('station-text-data'); // Element for text data
+        const stationMiniChartArea = document.getElementById('station-mini-chart'); // Element for mini chart
+
 
         // Define the data for each station based on the provided Word document
         const stationValidationData = {
@@ -511,6 +563,10 @@
             // Get the selected station's value
             const selectedStation = this.value;
 
+            // Clear previous chart and hide the area
+            stationMiniChartArea.innerHTML = '';
+            stationMiniChartArea.classList.add('hidden');
+
             // Check if a station was selected
             if (selectedStation) {
                 // Get the data for the selected station
@@ -518,71 +574,112 @@
 
                 // Check if data exists for the selected station
                 if (data) {
-                    // Display the data in a formatted way, showing only בוקר, יום, and ערב as percentages
-                    stationDataArea.innerHTML = `
+                    // Display the text data
+                    stationTextDataArea.innerHTML = `
                         <p class="font-semibold text-lg mb-2">${selectedStation}: התפלגות תיקופים לפי שעות היום</p>
                         <div class="data-item"><strong>בוקר:</strong> ${data.בוקר}%</div>
                         <div class="data-item"><strong>יום:</strong> ${data.יום}%</div>
                         <div class="data-item"><strong>ערב:</strong> ${data.ערב}%</div>
                     `;
-                    // Make the data box visible
-                    stationDataArea.style.display = 'block';
+
+                     // Generate and display mini bar chart
+                    const total = data.בוקר + data.יום + data.ערב;
+                    if (total > 0) { // Avoid division by zero
+                         stationMiniChartArea.innerHTML = `
+                            <div class="mini-bar-container">
+                                <span class="mini-bar-label">בוקר:</span>
+                                <div class="mini-bar" style="width: ${data.בוקר}%"></div>
+                            </div>
+                             <div class="mini-bar-container">
+                                <span class="mini-bar-label">יום:</span>
+                                <div class="mini-bar" style="width: ${data.יום}%"></div>
+                            </div>
+                            <div class="mini-bar-container">
+                                <span class="mini-bar-label">ערב:</span>
+                                <div class="mini-bar" style="width: ${data.ערב}%"></div>
+                            </div>
+                        `;
+                        stationMiniChartArea.classList.remove('hidden'); // Show chart
+                    }
+
+                    // Make the data box visible and use flex layout
+                    stationDataArea.style.display = 'flex';
                 } else {
                     // Display a message if data is not available
-                    stationDataArea.innerHTML = `<p>אין נתונים זמינים עבור תחנת "${selectedStation}" כרגע בדוח זה.</p>`;
-                     // Make the data box visible
-                    stationDataArea.style.display = 'block';
+                    stationTextDataArea.innerHTML = `<p>אין נתונים זמינים עבור תחנת "${selectedStation}" כרגע בדוח זה.</p>`;
+                    stationMiniChartArea.classList.add('hidden'); // Hide chart if no data
+                     // Make the data box visible and use flex layout
+                    stationDataArea.style.display = 'flex';
                 }
             } else {
                 // If "-- בחר תחנה --" is selected, show the default message
-                stationDataArea.innerHTML = `<p>בחר תחנה מהרשימה למעלה כדי לראות את הנתונים.</p>`;
-                stationDataArea.style.display = 'block';
+                stationTextDataArea.innerHTML = `<p>בחר תחנה מהרשימה למעלה כדי לראות את הנתונים.</p>`;
+                stationMiniChartArea.classList.add('hidden'); // Hide chart if no station selected
+                stationDataArea.style.display = 'flex';
             }
         });
 
         // Ensure the data area is visible initially with the default message
-        stationDataArea.style.display = 'block';
+        stationDataArea.style.display = 'flex';
 
 
-        // --- Section 2: Speed Data Interactivity (Simplified) ---
+        // --- Section 2: Speed Data Interactivity ---
         const segmentSelect = document.getElementById('segment-select');
         const segmentSpeedDataArea = document.getElementById('segment-speed-data');
+        const segmentTextDataArea = document.getElementById('segment-text-data'); // Element for text data
+        const speedIndicator = document.getElementById('speed-indicator'); // Element for speed indicator
 
-        // Define speed data for each segment
+
+        // Define speed data for each segment (using average or range midpoint for indicator)
         const segmentSpeedsData = {
-            "עילי בת ים/יפו": "14-16 קמ''ש",
-            "תת קרקעי": "25-35 קמ''ש",
-            "עילי פתח תקווה": "15-19 קמ''ש",
-            "הכי מהיר (פתח תקווה)": "39 קמ''ש",
-            "הכי איתית (כניסה לתת קרע)": "8 קמ''ש",
-            // Add data for other specific segments mentioned in the report if desired
+            "עילי בת ים/יפו": { speed: "14-16 קמ''ש", value: 15 }, // Added a numerical value
+            "תת קרקעי": { speed: "25-35 קמ''ש", value: 30 },
+            "עילי פתח תקווה": { speed: "15-19 קמ''ש", value: 17 },
+            "הכי מהיר (פתח תקווה)": { speed: "39 קמ''ש", value: 39 },
+            "הכי איתית (כניסה לתת קרע)": { speed: "8 קמ''ש", value: 8 },
         };
 
-        // Add an event listener to the segment dropdown
         segmentSelect.addEventListener('change', function() {
             const selectedSegment = this.value;
+            speedIndicator.classList.add('hidden'); // Hide indicator initially
+            speedIndicator.classList.remove('slow', 'medium', 'fast'); // Reset colors
 
             if (selectedSegment) {
-                const speed = segmentSpeedsData[selectedSegment];
+                const data = segmentSpeedsData[selectedSegment];
 
-                if (speed) {
-                    segmentSpeedDataArea.innerHTML = `
+                if (data) {
+                    // Update text data
+                    segmentTextDataArea.innerHTML = `
                         <p class="font-semibold text-lg mb-2">${selectedSegment}:</p>
-                        <div class="data-item"><strong>מהירות ממוצעת:</strong> ${speed}</div>
+                        <div class="data-item"><strong>מהירות ממוצעת:</strong> ${data.speed}</div>
                     `;
-                    segmentSpeedDataArea.style.display = 'block';
+
+                    // Update speed indicator color based on value
+                    if (data.value < 15) {
+                        speedIndicator.classList.add('slow');
+                    } else if (data.value >= 15 && data.value < 25) {
+                        speedIndicator.classList.add('medium');
+                    } else {
+                        speedIndicator.classList.add('fast');
+                    }
+                    speedIndicator.classList.remove('hidden'); // Show indicator
+
+
+                    segmentSpeedDataArea.style.display = 'flex';
                 } else {
-                    segmentSpeedDataArea.innerHTML = `<p>אין נתוני מהירות זמינים עבור מקטע "${selectedSegment}" בדוח זה.</p>`;
-                    segmentSpeedDataArea.style.display = 'block';
+                    segmentTextDataArea.innerHTML = `<p>אין נתוני מהירות זמינים עבור מקטע "${selectedSegment}" בדוח זה.</p>`;
+                     speedIndicator.classList.add('hidden'); // Hide indicator if no data
+                    segmentSpeedDataArea.style.display = 'flex';
                 }
             } else {
-                segmentSpeedDataArea.innerHTML = `<p>בחר מקטע מהרשימה למעלה כדי לראות את נתוני המהירות.</p>`;
-                segmentSpeedDataArea.style.display = 'block';
+                segmentTextDataArea.innerHTML = `<p>בחר מקטע מהרשימה למעלה כדי לראות את נתוני המהירות.</p>`;
+                speedIndicator.classList.add('hidden'); // Hide indicator if no segment selected
+                segmentSpeedDataArea.style.display = 'flex';
             }
         });
 
          // Ensure the speed data area is visible initially with the default message
-         segmentSpeedDataArea.style.display = 'block';
+         segmentSpeedDataArea.style.display = 'flex';
 
 
         // --- Section 5: Interactive Bar Graph ---
