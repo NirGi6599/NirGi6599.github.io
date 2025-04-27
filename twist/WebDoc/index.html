@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דוח רקל גוש דן - אינטראקטיבי</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles can go here if needed, but Tailwind should cover most */
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter font as requested */
+            direction: rtl; /* Right-to-leading for Hebrew */
+            text-align: right; /* Align text to the right */
+            line-height: 1.6; /* Improve readability */
+        }
+        .section-title {
+            border-bottom: 2px solid #facc15; /* Yellow border */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #1e40af; /* Darker blue for titles */
+        }
+        .interactive-data-box {
+            min-height: 120px; /* Ensure box has a minimum height, slightly larger */
+            background-color: #f3f4f6; /* Light gray background */
+            border-radius: 0.5rem; /* Rounded corners */
+            padding: 1rem;
+            margin-top: 1rem;
+            /* display: none; */ /* Keep it visible with default message initially */
+            border: 1px solid #d1d5db; /* Add a subtle border */
+        }
+        .data-item {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Styles for the tooltip (kept in case needed elsewhere, but not for speed map anymore) */
+        .speed-tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem; /* Rounded corners */
+            font-size: 0.875rem; /* Small font size */
+            pointer-events: none; /* Allow clicks to pass through the tooltip */
+            z-index: 10; /* Ensure tooltip is above other elements */
+            white-space: nowrap; /* Prevent text wrapping */
+            display: none; /* Hidden by default */
+            transform: translate(-50%, -100%); /* Position above the cursor */
+        }
+
+        /* CSS for the animated bar graph */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 250px; /* Increased height for the chart area */
+            /* Removed background and padding to make container invisible */
+            border-radius: 0.5rem;
+            gap: 3rem; /* Increased space between bar groups for clarity */
+            justify-content: center; /* Center the bar groups */
+            margin-top: 2rem; /* Add more space above the chart */
+            margin-bottom: 1rem; /* Add space below the chart */
+        }
+
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bar {
+            width: 100px; /* Increased width for each bar */
+            background-color: #3b82f6; /* Blue color */
+            border-radius: 0.25rem 0.25rem 0 0; /* Rounded top corners */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            height: 0; /* Start height at 0 for animation */
+            transition: height 1.5s ease-in-out; /* Animation for height change (slightly longer) */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add subtle shadow to bars */
+        }
+
+        .bar span {
+            padding: 5px;
+            font-size: 1rem; /* Slightly larger font for values */
+        }
+
+        .bar-label {
+            margin-top: 10px; /* More space between bar and label */
+            font-size: 1rem; /* Slightly larger font for labels */
+            color: #4a5568; /* Dark gray text */
+            text-align: center;
+            font-weight: 600; /* Semi-bold labels */
+        }
+
+        /* Animation class to apply */
+        .bar.animate {
+            /* Height will be set by JS, transition handles the animation */
+        }
+
+        /* Styling for the bold paragraphs */
+        .bold-insight {
+            font-weight: bold;
+            color: #15803d; /* Green color for insights */
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+         .bold-callout {
+             font-weight: bold;
+             color: #dc2626; /* Red color for calls to action/problems */
+             margin-top: 1rem;
+             margin-bottom: 1rem;
+         }
+
+         .italic-source {
+             font-style: italic;
+             color: #6b7280; /* Gray color for sources */
+             font-size: 0.875rem;
+             margin-top: 0.5rem;
+         }
+
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 md:p-8">
+
+    <div class="container mx-auto bg-white rounded-lg shadow-lg p-6 md:p-10">
+
+        <section class="mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-center text-blue-700 mb-6">
+                פוטנציאל מול מציאות: מדוע השימוש ברכבת הקלה לא עומד בתחזיות?
+            </h1>
+            <h2 class="text-xl md:text-2xl font-semibold text-center text-blue-600 mb-8">
+                סיכום שנת הפעילות הראשונה לדנקל
+            </h2>
+            <p class="text-lg mb-4 leading-relaxed">
+                כבר קצת יותר משנה שהרכבת הקלה פועלת בגוש דן, וזה הזמן לבדוק כיצד היא משרתת אותנו.
+                איך היא שינתה את דפוסי הנסיעה שלנו? האם השתפרה מהירות הנסיעה?
+                האם היא יעילה יותר מאוטובוס ואמצעי תחבורה אחרים? מה בה עובד טוב, ומה דווקא צריך לשפר?
+                ולמה היא לא עומדת בנתוני השימוש שצפינו? הדוח מציע כמה סיבות אפשריות, וכמה הצעות לשיפור... כל הנתונים כאן לפניכם.
+            </p>
+            <p class="text-sm italic-source">
+                הדוח מקיף ומתבסס על מספר מקורות מידע, ביניהם מערכת הנתונים של 15 דקות בשיתוף יישומון "הופאון רב-פס", נתוני מסלקה של משרד התחבורה, נתוני זמן אמת (SIRI), ניתוח ערוץ הטלגרם של "תבל", בדיקות מדגמיות בשטח ודיווחי נוסעים.
+            </p>
+            <img src="p1.jpg" alt="תמונה כללית של הרכבת הקלה" class="mx-auto my-8 rounded-md w-full max-w-xl">
+        </section>
+
+        <hr class="my-10 border-gray-300">
+
+        <section class="mb-10">
+            <h3 class="text-2xl md:text-3xl font-semibold section-title text-blue-700">
+                1. יוממות ותיקופים לפי שעות
+            </h3>
+            <p class="mb-6 leading-relaxed">
+                באילו שעות מתקפים יותר בכל תחנה? באילו פחות? ומה ניתן ללמוד מכך על היוממות בגוש דן?
+                בחרו תחנה מהרשימה למטה כדי לראות את התפלגות התיקופים לפי שעות היום.
+            </p>
+
+            <div class="mb-6">
+                <label for="station-select" class="block text-lg font-medium text-gray-700 mb-2">בחירת תחנה:</label>
+                <select id="station-select" class="mt-1 block w-full md:w-1/2 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option value="">-- בחר תחנה --</option>
+                    <option value="הקוממיות">הקוממיות</option>
+                    <option value="העמל">העמל</option>
+                    <option value="כ''ט בנובמבר">כ''ט בנובמבר</option>
+                    <option value="יוספטל">יוספטל</option>
+                    <option value="בנימין">בנימין</option>
+                    <option value="בלפור">בלפור</option>
+                    <option value="ז'בוטינסקי">ז'בוטינסקי</option>
+                    <option value="רוטשילד">רוטשילד</option>
+                    <option value="העצמאות">העצמאות</option>
+                    <option value="מחרוזת">מחרוזת</option>
+                    <option value="הבעש''ט">הבעש''ט</option>
+                    <option value="איסקוב">איסקוב</option>
+                    <option value="ארליך">ארליך</option>
+                    <option value="אצטדיון בלומפילד">אצטדיון בלומפילד</option>
+                    <option value="שלמה">שלמה</option>
+                    <option value="אליפלט">אליפלט</option>
+                    <option value="אלנבי">אלנבי</option>
+                    <option value="קרליבך">קרליבך</option>
+                    <option value="יהודית">יהודית</option>
+                    <option value="שאול המלך">שאול המלך</option>
+                    <option value="ארלוזורוב">ארלוזורוב</option>
+                    <option value="אבא הלל">אבא הלל</option>
+                    <option value="ביאליק">ביאליק</option>
+                    <option value="בן גוריון">בן גוריון</option>
+                    <option value="אהרונוביץ'">אהרונוביץ'</option>
+                    <option value="גשר אם המושבות">גשר אם המושבות</option>
+                    <option value="קרית אריה">קרית אריה</option>
+                    <option value="שנקר">שנקר</option>
+                    <option value="שחם">שחם</option>
+                    <option value="בלינסון">בלינסון</option>
+                    <option value="דנקנר">דנקנר</option>
+                    <option value="קרול">קרול</option>
+                    <option value="פינסקר">פינסקר</option>
+                    <option value="תחנה מרכזית פתח תקווה">תחנה מרכזית פתח תקווה</option>
+                </select>
+            </div>
+
+            <div id="station-data" class="interactive-data-box">
+                <p>בחר תחנה מהרשימה למעלה כדי לראות את הנתונים.</p>
+            </div>
+
+             <img src="p2.png" alt="גרף התפלגות תיקופים לפי שעות ותחנות" class="mx-auto my-8 rounded-md w-full max-w-xl">
+
+            <p class="mt-6 leading-relaxed">
+                <strong>התפלגות תיקופים לפי שעות היום:</strong>
+                <br>
+                בתחנות הקצה של הקווים, <strong>בין חצי לשני שליש מהתיקופים הם בבוקר.</strong>
+                <br>
+                בתל אביב, עד חצי מתיקופים הם בערב - <strong>מגמת שימוש אופיינית ליוממות בגוש דן, כאשר אנשים מתקפים את הנסיעה ונוסעים ממקום העבודה חזרה לביתם.</strong>
+                <br>
+                גם תחנות שנקר ושחם בפתח תקווה מייצגות מגמה דומה לזו בתל אביב, בשל הימצאות מוקד תעסוקה גדול באזור. תחנות עם אחוז תיקופים גבוה בבוקר משרתות בעיקר אזורי מגורים, או שמדובר בתחנת החלפה כמו בקריית אריה (שבה יש גם תחנת רכבת כבדה).
+                <br>
+                בתחנות אלנבי ובלומפילד יש את האחוז הגבוה ביותר של תיקופים בשעות המאוחרות (לילה): <strong>אלנבי - אזור בילויים, בלומפילד - לאחר משחקי כדורגל.</strong>
+            </p>
+
+            <p class="mt-6 text-sm italic-source">
+                ניתוח מבוסס על יותר משני מיליון תיקופים דרך אפליקצית הופאון מתחילת הפעלת הרק"ל, מנורמל לאחוז שימוש באפליקציה בתחנה.
+            </p>
+        </section>
+
+        <hr class="my-10 border-gray-300">
+
+        <section class="mb-10">
+            <h3 class="text-2xl md:text-3xl font-semibold section-title text-blue-700">
+                2. מהירות הקו האדום - לפי מקטעים
+            </h3>
+            <p class="mb-6 leading-relaxed">
+                בדקנו את מהירות הקו האדום לשני הכיוונים בכל שעות היום. המהירות הממוצעת לאורך כל הקו היא כ-20 קמ"ש.
+                בחרו מקטע מהרשימה למטה כדי לראות את נתוני המהירות הממוצעת בו.
+            </p>
+
+            <div class="mb-6">
+                <label for="segment-select" class="block text-lg font-medium text-gray-700 mb-2">בחירת מקטע:</label>
+                <select id="segment-select" class="mt-1 block w-full md:w-1/2 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option value="">-- בחר מקטע --</option>
+                    <option value="עילי בת ים/יפו">מקטע עילי בת ים/יפו</option>
+                    <option value="תת קרקעי">מקטע תת קרקעי</option>
+                    <option value="עילי פתח תקווה">מקטע עילי פתח תקווה</option>
+                    <option value="הכי מהיר (פתח תקווה)">מקטע הכי מהיר (פתח תקווה)</option>
+                    <option value="הכי איתית (כניסה לתת קרקע)">נקודה הכי איתית (כניסה לתת קרקע)</option>
+                    </select>
+            </div>
+
+            <div id="segment-speed-data" class="interactive-data-box">
+                 <p>בחר מקטע מהרשימה למעלה כדי לראות את נתוני המהירות.</p>
+            </div>
+
+            <img src="p3.png" alt="גרף מהירות הקו האדום לפי מקטעים" class="mx-auto my-8 rounded-md w-full max-w-xl">
+
+            <p class="mt-6 leading-relaxed">
+                <strong>מה קורה כשמשווים את המהירות בין המקטעים השונים?</strong>
+                <br>
+                במקטעים העיליים בערים בת ים ויפו, המהירות היא <strong>14-16 קמ“ש</strong> (מעט נמוכה יותר ממהירות ממוצעת של אוטובוס בגוש דן). בהתחשב בנתונים אלו, <strong>לא מפתיע שהשימוש ברק״ל בבת ים נמוך יותר - פשוט יותר משתלם לקחת אוטובוס.</strong>
+                <br>
+                במקטע התת קרקעי המהירות היא <strong>25-35 קמ“ש. מבין כלי התח“צ העירוניים, רק קו 4 של המטרונית בחיפה משתווה למהירות זו, בזכות העובדה שחלק משמעותי ממנו עובר במנהרות הכרמל.</strong>
+                <br>
+                במקטע העילי בעיר פתח תקווה, המהירות היא <strong>15-19 קמ“ש</strong>, כמו ברק“ל בירושלים (18 קמ“ש).
+            </p>
+
+            <p class="mt-6 text-sm italic-source">
+                חישוב מהירות מבוסס על נתוני זמן אמת ממשרד התחבורה (SIRI), מאי עד ספטמבר 2024.
+            </p>
+        </section>
+
+        <hr class="my-10 border-gray-300">
+
+        <section class="mb-10">
+            <h3 class="text-2xl md:text-3xl font-semibold section-title text-blue-700">
+                3. קישוריות הקו האדום לאמצעי תחבורה ציבורית נוספים
+            </h3>
+            <p class="mb-6 leading-relaxed">
+                 <strong>רק כ-10% מהנוסעים ברק"ל מבצעים החלפה ונסעו לפני כן באוטובוס או ברכבת ישראל.</strong>
+            </p>
+            <p class="mb-6 leading-relaxed">
+                יש צורך באמצעי תחבורה ציבורית מזינים לקו, שיוכלו לקשר ביעילות בין אזורים שלא נמצאים על התוואי ובין הרכבת ולאפשר החלפה קלילה.
+            </p>
+            
+             <p class="mb-6 leading-relaxed bold-insight">
+                בגני תקווה למשל יש את קו 75 החדש, שנוצר במטרה להסיע את התושבים לתחנת הרק״ל הקרובה. הקו הוא תוצאה של הצלחת
+                שאטל ביוזמת העירייה שהוכיח את הביקוש לקו. העירייה היא זו שלקחה אחריות על התחב״צ בעיר, יצרה קו
+                לתושבים, ובעקבות ההצלחה המסחררת, במשרד התחבורה לא יכלו להישאר אדישים, והקצו קו ייעודי.             </p>
+             
+             <img src="p4.jpg" alt="מפת תחנות אוטובוס מזינות" class="mx-auto my-8 rounded-md w-full max-w-xl">
+        </section>
+
+        <hr class="my-10 border-gray-300">
+
+        <section class="mb-10">
+            <h3 class="text-2xl md:text-3xl font-semibold section-title text-blue-700">
+                4. שימוש VS. פוטנציאל ביקוש
+            </h3>
+            <p class="mb-6 leading-relaxed">
+                במפה זו  מוצג אחוז הביקוש לעומת התחזיות, ברמת אזורים ושכונות. ניתן להסיק מאילו אזורים קל להגיע לרכבת הקלה, ומאילו מסובך יותר.
+            </p>
+             <img src="p5.png" alt="מפת שימוש מול פוטנציאל ביקוש" class="mx-auto my-8 rounded-md w-full max-w-xl">
+            <ul class="list-disc list-inside mb-6 leading-relaxed">
+                <li><strong>מרבית האנשים ברדיוס של 500 מ' מתחנה מגיעים ברגל.</strong></li>
+                <li>מעטים מגיעים ממרחק של יותר מ-5 ק"מ, שם משתלם יותר לקחת קו ישיר.</li>
+                <li>הפוטנציאל נמצא בטווח עד 5 ק"מ: <strong>מתגוררים כ-1.8 מיליון איש, מתוכם למעלה מ-400,000 משתמשים בתחב"צ.</strong></li>
+                <li><strong>יש כמות אדירה של נוסעים פוטנציאליים שלא משתמשים בגלל היעדר קווים מזינים יעילים מאזורים כמו חולון ודרום-מזרח ת"א.</strong></li>
+            </ul>
+             <p class="mb-6 leading-relaxed bold-callout">
+                 !ניתן להגדיל באופן דרמטי את השימוש באמצעות קווים מזינים או שאטלים ממוקדים ממרכזים ישירות אל תחנת הרק"ל הקרובה!
+             </p>
+             <p class="text-sm italic-source">
+                 הביקוש הצפוי מחושב על בסיס כמות אנשים באזורים סטטיסטים ואחוז משתמשים בתחבורה ציבורית לפי מפקד האכלוסין 2022 וכמות מקומות עבודה.
+             </p>
+        </section>
+
+        <hr class="my-10 border-gray-300">
+
+        <section class="mb-10">
+            <h3 class="text-2xl md:text-3xl font-semibold section-title text-blue-700">
+                5. השוואה לקווי אוטובוס מקבילים
+            </h3>
+            <p class="mb-6 leading-relaxed">
+                ניתחנו את השפעת הרק"ל על השימוש בקווי האוטובוס המקבילים במסלולם לקו האדום.
+                הנה השוואה ויזואלית של כמות הנוסעים לקילומטר בין הרכבת הקלה בגוש דן לזו בירושלים:
+            </p>
+
+             <p class="mb-6 leading-relaxed bold-insight">
+                 קבלו נתון מעניין! לקו האדום יש פי 4 יותר משתמשים מאשר לקו 1, שהיה הקו המכין לקו האדום (כ-500 אלף תיקופים בשבוע לעומת כ-120,000).
+             </p>
+             <p class="mb-6 leading-relaxed">
+                 <strong>רבים מהמשתמשים בקו האדום לא השתמשו לפני כן בקו 1 - כלומר הגיעו משתמשים חדשים בזכות תשתית טובה יותר.</strong>
+             </p>
+             <p class="mb-6 leading-relaxed bold-insight">
+                 קבלו נתון מעניין! אחוז התיקופים ברק"ל בגוש דן עומד על כ-3% מכלל התיקופים הארציים, בעוד שבירושלים הוא <strong>4-5%.</strong>
+             </p>
+             <p class="mb-6 leading-relaxed">
+                 בצלילה לעומק, ברכבת הקלה בירושלים יש <strong>כ-30 נוסעים לקילומטר נסיעה</strong>, בעוד שבגוש דן יש רק <strong>כ-10 נוסעים לקילומטר נסיעה.</strong>
+             </p>
+
+            <div id="passengers-per-km-chart" class="bar-chart">
+                <div class="bar-group">
+                    <div class="bar" data-value="10">
+                        <span>10</span>
+                    </div>
+                    <div class="bar-label">גוש דן (דנקל)</div>
+                </div>
+
+                <div class="bar-group">
+                    <div class="bar" data-value="30">
+                         <span>30</span>
+                    </div>
+                     <div class="bar-label">ירושלים</div>
+                </div>
+            </div>
+
+             <p class="text-sm italic-source mt-6">
+                 כמות משתמשים פר קילומטר נסיעה - על פי כמות תיקופים מול כמות נסיעות מתוכננות ואורך הקווים.
+             </p>
+             <p class="text-sm italic-source">
+                 נתוני מסלקה כללית, משרד התחבורה.
+             </p>
+             </section>
+
+        <hr class="my-10 border-gray-300">
+
+        <section class="mb-10">
+            <h3 class="text-2xl md:text-3xl font-semibold section-title text-blue-700">
+                6. קולות מהציבור
+            </h3>
+            <p class="mb-6 leading-relaxed">
+                באופן כללי יש <strong>שביעות רצון גבוהה מפעילות הרכבת הקלה, בעיקר בחלק התת קרקעי ובפתח תקווה, ומהתדירות הגבוהה.</strong>
+                עם זאת, עלו מספר משובים שחוזרים על עצמם:
+            </p>
+            <ul class="list-disc list-inside mb-6 leading-relaxed">
+                <li>שילוט בתחנה אינו תמיד ברור מספיק.</li>
+                <li>אין מקומות ישיבה ברציפי התחנות, בעיה לאוכלוסיה מבוגרת.</li>
+                <li>חסר מעבר תת קרקעי בארלוזורוב להחלפה קלה לרכבת ישראל.</li>
+                <li>הכניסה לתחנות התת קרקעיות לא תמיד בולטת מספיק, וחסר צג בכניסה המראה זמני הגעה.</li>
+                <li>אין נקודה נוספת של ולידטורים בתחנות התת קרקעיות, מה שמצריך לעיתים סיבוב ארוך.</li>
+            </ul>
+             <img src="p6.jpg" alt="תמונה קשורה למשוב ציבורי או תחנות" class="mx-auto my-8 rounded-md w-full max-w-xl">
+        </section>
+
+        <hr class="my-10 border-gray-300">
+
+        <section class="mb-10">
+             <h3 class="text-2xl md:text-3xl font-semibold section-title text-blue-700">
+                7. סיכום וצפייה לעתיד
+            </h3>
+            <p class="mb-6 leading-relaxed">
+                הרכבת הקלה חוללה מהפכה ושינתה הרגלי נסיעה. <strong>המקטע התת-קרקעי והקו בפתח תקווה מספקים אלטרנטיבה טובה לרכב הפרטי.</strong>
+            </p>
+            <p class="mb-6 leading-relaxed bold-callout">
+                <strong>יש לשפר את מהירות הנסיעה בחלק העילי בבת ים ויפו - המהירות האיטית משפיעה על נתוני השימוש. יש להעניק לרק"ל עדיפות ברמזורים.</strong>
+            </p>
+            <p class="mb-6 leading-relaxed bold-callout">
+                <strong>כדי להעלות את רמת השימוש עד שתהיה רשת קווים מלאה, יש לבנות רשת יעילה של קווי אוטובוס מזינים.</strong>
+            </p>
+            <p class="mb-6 leading-relaxed">
+                 הסיבות לשימוש נמוך ביחס לתחזיות: מהירות נמוכה במקטעים מסוימים והיעדר קווים מזינים יעילים. <strong>לקו האדום פוטנציאל אדיר שאינו ממומש במלואו.</strong>
+            </p>
+            <p class="mb-6 leading-relaxed">
+                <strong>חווית הנוסע השתפרה לאורך השנה</strong> (פחות תקלות, תדירות גבוהה יותר), אך <strong>יש לשפר את מנגנון היידוע לציבור בזמן תקלות ושינויים, ולטפל בסוגיות המרכזיות שעלו בדוח זה</strong> כמו ספסלים בתחנות, בולטות ונגישות התחנה ועוד.
+            </p>
+             <p class="mb-6 leading-relaxed">
+                הקו האדום הוא <strong>הישג משמעותי לשיפור התחב"צ בישראל ולשירות חדיש, אמין ויעיל. יש לקדם במהרה את תשתיות הרק"ל בקווים הנוספים וכן את המטרו - הפרויקט הלאומי הגדול ביותר להסעת המונים. כל אלו יביאו עימם בשורה אמיתית וישנו את המציאות התחבורתית בישראל.</strong>
+            </p>
+             <img src="p7.png" alt="תמונה מסכמת" class="mx-auto my-8 rounded-md w-full max-w-xl">
+        </section>
+
+    </div>
+
+    <script>
+        // JavaScript for interactivity
+
+        // --- Section 1: Station Validation Data ---
+        // Get the dropdown element
+        const stationSelect = document.getElementById('station-select');
+        // Get the div where the data will be displayed
+        const stationDataArea = document.getElementById('station-data');
+
+        // Define the data for each station based on the graph in the report (Page 2)
+        // Data is approximated from the bar graph percentages.
+        const stationValidationData = {
+            "הקוממיות": { morning: "66%", evening: "29%", night: "4%", day: "אין מידע", lateNight: "אין מידע" },
+            "העמל": { morning: "64%", evening: "19%", night: "17%", day: "אין מידע", lateNight: "אין מידע" },
+            "כ''ט בנובמבר": { morning: "59%", evening: "20%", night: "20%", day: "אין מידע", lateNight: "אין מידע" },
+            "יוספטל": { morning: "26%", evening: "31%", night: "38%", day: "אין מידע", lateNight: "אין מידע" },
+            "בנימין": { morning: "34%", evening: "26%", night: "34%", day: "אין מידע", lateNight: "אין מידע" },
+            "בלפור": { morning: "27%", evening: "34%", night: "26%", day: "אין מידע", lateNight: "אין מידע" },
+            "ז'בוטינסקי": { morning: "34%", evening: "27%", night: "37%", day: "אין מידע", lateNight: "אין מידע" },
+            "רוטשילד": { morning: "25%", evening: "56%", night: "19%", day: "אין מידע", lateNight: "אין מידע" },
+            "העצמאות": { morning: "19%", evening: "51%", night: "25%", day: "אין מידע", lateNight: "אין מידע" },
+            "מחרוזת": { morning: "9%", evening: "47%", night: "41%", day: "אין מידע", lateNight: "אין מידע" },
+            "הבעש''ט": { morning: "8%", evening: "50%", night: "43%", day: "אין מידע", lateNight: "אין מידע" },
+            "איסקוב": { morning: "22%", evening: "28%", night: "50%", day: "אין מידע", lateNight: "אין מידע" },
+            "ארליך": { morning: "20%", evening: "28%", night: "52%", day: "אין מידע", lateNight: "אין מידע" },
+            "אצטדיון בלומפילד": { morning: "21%", evening: "53%", night: "26%", day: "אין מידע", lateNight: "אין מידע" },
+            "שלמה": { morning: "20%", evening: "52%", night: "26%", day: "אין מידע", lateNight: "אין מידע" },
+            "אליפלט": { morning: "24%", evening: "54%", night: "22%", day: "אין מידע", lateNight: "אין מידע" },
+            "אלנבי": { morning: "23%", evening: "53%", night: "24%", day: "אין מידע", lateNight: "אין מידע" },
+            "קרליבך": { morning: "25%", evening: "54%", night: "21%", day: "אין מידע", lateNight: "אין מידע" },
+            "יהודית": { morning: "24%", evening: "50%", night: "25%", day: "אין מידע", lateNight: "אין מידע" },
+            "שאול המלך": { morning: "32%", evening: "43%", night: "24%", day: "אין מידע", lateNight: "אין מידע" },
+            "ארלוזורוב": { morning: "33%", evening: "33%", night: "32%", day: "אין מידע", lateNight: "אין מידע" },
+            "אבא הלל": { morning: "32%", evening: "28%", night: "34%", day: "אין מידע", lateNight: "אין מידע" },
+            "ביאליק": { morning: "31%", evening: "30%", night: "34%", day: "אין מידע", lateNight: "אין מידע" },
+            "בן גוריון": { morning: "29%", evening: "32%", night: "35%", day: "אין מידע", lateNight: "אין מידע" },
+            "אהרונוביץ'": { morning: "31%", evening: "38%", night: "26%", day: "אין מידע", lateNight: "אין מידע" },
+            "גשר אם המושבות": { morning: "18%", evening: "31%", night: "9686%", day: "אין מידע", lateNight: "אין מידע" }, // Data seems inconsistent in report image for night
+            "קרית אריה": { morning: "20%", evening: "29%", night: "47%", day: "אין מידע", lateNight: "אין מידע" },
+            "שנקר": { morning: "17%", evening: "30%", night: "50%", day: "אין מידע", lateNight: "אין מידע" },
+            "שחם": { morning: "41%", evening: "24%", night: "33%", day: "אין מידע", lateNight: "אין מידע" },
+            "בלינסון": { morning: "27%", evening: "28%", night: "43%", day: "אין מידע", lateNight: "אין מידע" },
+            "דנקנר": { morning: "28%", evening: "28%", night: "43%", day: "אין מידע", lateNight: "אין מידע" },
+            "קרול": { morning: "27%", evening: "29%", night: "16%", day: "אין מידע", lateNight: "אין מידע" },
+            "פינסקר": { morning: "32%", evening: "529%", night: "%69", day: "אין מידע", lateNight: "אין מידע" }, // Data seems inconsistent/typo in report image
+            "תחנה מרכזית פתח תקווה": { morning: "35%", evening: "26%", night: "9%88", day: "אין מידע", lateNight: "אין מידע" }, // Data seems inconsistent/typo in report image
+        };
+
+        // Add an event listener to the dropdown
+        stationSelect.addEventListener('change', function() {
+            // Get the selected station's value
+            const selectedStation = this.value;
+
+            // Check if a station was selected
+            if (selectedStation) {
+                // Get the data for the selected station
+                const data = stationValidationData[selectedStation];
+
+                // Check if data exists for the selected station
+                if (data) {
+                    // Display the data in a formatted way
+                    stationDataArea.innerHTML = `
+                        <p class="font-semibold text-lg mb-2">${selectedStation}: התפלגות תיקופים לפי שעות היום</p>
+                        <div class="data-item"><strong>בוקר (5:00-9:00):</strong> ${data.morning}</div>
+                        <div class="data-item"><strong>יום (10:00-14:00):</strong> ${data.day || 'אין מידע'}</div>
+                        <div class="data-item"><strong>אחר הצהריים (15:00-20:00):</strong> ${data.evening}</div>
+                        <div class="data-item"><strong>לילה (21:00-1:00):</strong> ${data.night}</div>
+                        <div class="data-item"><strong>מאוחר (2:00-4:00):</strong> ${data.lateNight || 'אין מידע'}</div>
+                    `;
+                    // Make the data box visible
+                    stationDataArea.style.display = 'block';
+                } else {
+                    // Display a message if data is not available
+                    stationDataArea.innerHTML = `<p>אין נתונים זמינים עבור תחנת "${selectedStation}" כרגע בדוח זה.</p>`;
+                     // Make the data box visible
+                    stationDataArea.style.display = 'block';
+                }
+            } else {
+                // If "-- בחר תחנה --" is selected, show the default message
+                stationDataArea.innerHTML = `<p>בחר תחנה מהרשימה למעלה כדי לראות את הנתונים.</p>`;
+                stationDataArea.style.display = 'block';
+            }
+        });
+
+        // Ensure the data area is visible initially with the default message
+        stationDataArea.style.display = 'block';
+
+
+        // --- Section 2: Speed Data Interactivity (Simplified) ---
+        const segmentSelect = document.getElementById('segment-select');
+        const segmentSpeedDataArea = document.getElementById('segment-speed-data');
+
+        // Define speed data for each segment
+        const segmentSpeedsData = {
+            "עילי בת ים/יפו": "14-16 קמ''ש",
+            "תת קרקעי": "25-35 קמ''ש",
+            "עילי פתח תקווה": "15-19 קמ''ש",
+            "הכי מהיר (פתח תקווה)": "39 קמ''ש",
+            "הכי איתית (כניסה לתת קרקע)": "8 קמ''ש",
+            // Add data for other specific segments mentioned in the report if desired
+        };
+
+        // Add an event listener to the segment dropdown
+        segmentSelect.addEventListener('change', function() {
+            const selectedSegment = this.value;
+
+            if (selectedSegment) {
+                const speed = segmentSpeedsData[selectedSegment];
+
+                if (speed) {
+                    segmentSpeedDataArea.innerHTML = `
+                        <p class="font-semibold text-lg mb-2">${selectedSegment}:</p>
+                        <div class="data-item"><strong>מהירות ממוצעת:</strong> ${speed}</div>
+                    `;
+                    segmentSpeedDataArea.style.display = 'block';
+                } else {
+                    segmentSpeedDataArea.innerHTML = `<p>אין נתוני מהירות זמינים עבור מקטע "${selectedSegment}" בדוח זה.</p>`;
+                    segmentSpeedDataArea.style.display = 'block';
+                }
+            } else {
+                segmentSpeedDataArea.innerHTML = `<p>בחר מקטע מהרשימה למעלה כדי לראות את נתוני המהירות.</p>`;
+                segmentSpeedDataArea.style.display = 'block';
+            }
+        });
+
+         // Ensure the speed data area is visible initially with the default message
+         segmentSpeedDataArea.style.display = 'block';
+
+
+        // --- Section 5: Interactive Bar Graph ---
+        // Removed button reference
+        const passengersChart = document.getElementById('passengers-per-km-chart');
+        // Select the bar elements within their new group containers
+        const chartBars = passengersChart.querySelectorAll('.bar-group .bar');
+
+        // Function to animate the bars
+        function animateBars() {
+             chartBars.forEach(bar => {
+                const value = parseInt(bar.dataset.value, 10); // Get the data-value attribute
+                // Calculate the height based on the value and the chart height
+                // Add a small base height so even value 0 is visible (optional, but good practice)
+                const maxHeight = 250; // Corresponds to the bar-chart height
+                const maxDataValue = 30; // The maximum data value in our set (Jerusalem)
+                // Scale value proportionally to the chart height, leaving some room at the top
+                const animatedHeight = (value / maxDataValue) * (maxHeight - 40) + 20; // Scale to max 210px, min 20px
+
+                // Set the height using style property to trigger CSS transition
+                bar.style.height = `${animatedHeight}px`;
+                // The CSS transition property handles the slow build-up animation
+            });
+        }
+
+        // Animate the bars when the page finishes loading
+        window.addEventListener('load', animateBars);
+
+
+    </script>
+
+</body>
+</html>
