@@ -309,6 +309,57 @@
              <p class="text-sm italic-source">
                  הביקוש הצפוי מחושב על בסיס כמות אנשים באזורים סטטיסטים ואחוז משתמשים בתחבורה ציבורית לפי מפקד האכלוסין 2022 וכמות מקומות עבודה.
              </p>
+
+             <div class="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+                 <h4 class="text-xl font-semibold text-blue-700 mb-4">הערכת פוטנציאל השימוש ברכבת הקלה עבורך</h4>
+                 <p class="mb-4">ענה על השאלות הבאות כדי לקבל הערכה אישית:</p>
+
+                 <div class="mb-4">
+                     <label for="distance-range" class="block text-lg font-medium text-gray-700 mb-2">מרחק משוער ממקום מגוריך לתחנת הרכבת הקלה הקרובה ביותר:</label>
+                     <select id="distance-range" class="mt-1 block w-full md:w-1/2 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                         <option value="">-- בחר מרחק --</option>
+                         <option value="close">עד 500 מטר (הליכה קצרה)</option>
+                         <option value="medium">500 מטר עד 5 ק"מ</option>
+                         <option value="far">מעל 5 ק"מ</option>
+                     </select>
+                 </div>
+
+                 <div class="mb-4">
+                     <label class="block text-lg font-medium text-gray-700 mb-2">האם קיים קו אוטובוס מזין נוח ויעיל שמגיע ישירות לתחנת הרכבת הקלה הקרובה?</label>
+                     <div class="mt-2">
+                         <label class="inline-flex items-center mr-6">
+                             <input type="radio" class="form-radio text-blue-600" name="feeder-line" value="yes">
+                             <span class="ml-2">כן</span>
+                         </label>
+                         <label class="inline-flex items-center">
+                             <input type="radio" class="form-radio text-blue-600" name="feeder-line" value="no">
+                             <span class="ml-2">לא או לא בטוח</span>
+                         </label>
+                     </div>
+                 </div>
+
+                  <div class="mb-4">
+                     <label class="block text-lg font-medium text-gray-700 mb-2">האם היעד/ים המרכזי/ים שלך נמצא/ים בקרבת תחנת רכבת קלה?</label>
+                     <div class="mt-2">
+                         <label class="inline-flex items-center mr-6">
+                             <input type="radio" class="form-radio text-blue-600" name="destination-near" value="yes">
+                             <span class="ml-2">כן</span>
+                         </label>
+                         <label class="inline-flex items-center">
+                             <input type="radio" class="form-radio text-blue-600" name="destination-near" value="no">
+                             <span class="ml-2">לא או לא בטוח</span>
+                         </label>
+                     </div>
+                 </div>
+
+
+                 <button id="check-potential-btn" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                     קבל הערכה
+                 </button>
+
+                 <div id="potential-output" class="mt-4 p-3 bg-blue-100 rounded-md text-blue-800 hidden">
+                     </div>
+             </div>
         </section>
 
         <hr class="my-10 border-gray-300">
@@ -559,6 +610,81 @@
 
         // Animate the bars when the page finishes loading
         window.addEventListener('load', animateBars);
+
+        // --- New Interactive Element Logic (Section 4) ---
+        const distanceRangeSelect = document.getElementById('distance-range');
+        const feederLineRadios = document.querySelectorAll('input[name="feeder-line"]');
+        const destinationNearRadios = document.querySelectorAll('input[name="destination-near"]');
+        const checkPotentialBtn = document.getElementById('check-potential-btn');
+        const potentialOutput = document.getElementById('potential-output');
+
+        checkPotentialBtn.addEventListener('click', function() {
+            const distanceRange = distanceRangeSelect.value;
+            let feederLine = null;
+            feederLineRadios.forEach(radio => {
+                if (radio.checked) {
+                    feederLine = radio.value;
+                }
+            });
+             let destinationNear = null;
+            destinationNearRadios.forEach(radio => {
+                if (radio.checked) {
+                    destinationNear = radio.value;
+                }
+            });
+
+
+            // Clear previous output and hide the box
+            potentialOutput.innerHTML = '';
+            potentialOutput.classList.add('hidden');
+
+            if (!distanceRange || !feederLine || !destinationNear) {
+                potentialOutput.innerHTML = '<p class="text-red-700 font-semibold">אנא ענה על כל השאלות כדי לקבל הערכה.</p>';
+                potentialOutput.classList.remove('hidden');
+                return;
+            }
+
+            let message = '<strong>הערכת פוטנציאל השימוש ברכבת הקלה עבורך:</strong><br>';
+
+            if (distanceRange === 'close') {
+                message += 'מקום מגוריך נמצא בטווח הליכה קצר מאוד מתחנת הרכבת הקלה (עד 500 מטר). <strong>מרבית האנשים ברדיוס זה מגיעים ברגל!</strong> זהו פוטנציאל שימוש גבוה מאוד.';
+                if (destinationNear === 'yes') {
+                     message += ' ויעדך קרוב לתחנה - זהו שילוב אידיאלי לנסיעה ברכבת הקלה.';
+                 } else {
+                     message += ' אך יעדך אינו קרוב לתחנה - ייתכן שתצטרך לשלב אמצעי תחבורה נוספים.';
+                 }
+            } else if (distanceRange === 'medium') {
+                message += `מקום מגוריך נמצא במרחק בינוני מתחנת הרכבת הקלה (500 מטר עד 5 ק"מ). <strong>הפוטנציאל הגדול ביותר למשתמשים חדשים נמצא בטווח זה.</strong>`;
+                if (feederLine === 'yes') {
+                    message += ' ויש לך קו מזין נוח - זה משפר משמעותית את הנגישות והופך את הרכבת הקלה לאטרקטיבית יותר עבורך, בדומה לתושבי גני תקווה המשתמשים בקו 75.';
+                    if (destinationNear === 'yes') {
+                         message += ' ויעדך קרוב לתחנה - שילוב זה מצביע על פוטנציאל שימוש גבוה.';
+                     } else {
+                         message += ' אך יעדך אינו קרוב לתחנה - ייתכן שהנסיעה תדרוש יותר החלפות.';
+                     }
+                } else {
+                    message += ' אך אין לך קו מזין נוח. <strong>היעדר קווים מזינים יעילים מאזורים בטווח זה הוא אחת הסיבות המרכזיות לשימוש נמוך ביחס לתחזיות.</strong> פוטנציאל השימוש עבורך קיים, אך פחות ממומש ללא קישוריות טובה.';
+                     if (destinationNear === 'yes') {
+                         message += ' למרות שיעדך קרוב לתחנה.';
+                     } else {
+                         message += '.'; // End sentence
+                     }
+                }
+            } else { // distanceRange === 'far'
+                message += `מקום מגוריך נמצא במרחק גדול יחסית מתחנת הרכבת הקלה (מעל 5 ק"מ). <strong>מעטים מגיעים לרכבת הקלה ממרחק זה, שם לרוב משתלם יותר לקחת קו תחבורה ציבורית ישיר ליעד.</strong>`;
+                 if (feederLine === 'yes') {
+                     message += ' גם אם יש קו מזין, הנסיעה עשויה להיות ארוכה.';
+                 }
+                 if (destinationNear === 'yes') {
+                     message += ' ייתכן שהשימוש יהיה כדאי אם יעדך ספציפית קרוב מאוד לתחנה ואין חלופות ישירות טובות יותר.';
+                 } else {
+                     message += ' פוטנציאל השימוש עבורך נמוך יחסית.';
+                 }
+            }
+
+            potentialOutput.innerHTML = `<p>${message}</p>`;
+            potentialOutput.classList.remove('hidden'); // Show the output box
+        });
 
 
     </script>
