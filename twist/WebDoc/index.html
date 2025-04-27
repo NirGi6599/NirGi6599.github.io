@@ -241,7 +241,7 @@
                     <option value="תת קרקעי">מקטע תת קרקעי</option>
                     <option value="עילי פתח תקווה">מקטע עילי פתח תקווה</option>
                     <option value="הכי מהיר (פתח תקווה)">מקטע הכי מהיר (פתח תקווה)</option>
-                    <option value="הכי איתית (כניסה לתת קרקע)">נקודה הכי איתית (כניסה לתת קרקע)</option>
+                    <option value="הכי איתית (כניסה לתת קרע)">נקודה הכי איתית (כניסה לתת קרע)</option>
                     </select>
             </div>
 
@@ -417,43 +417,42 @@
         // Get the div where the data will be displayed
         const stationDataArea = document.getElementById('station-data');
 
-        // Define the data for each station based on the graph in the report (Page 2)
-        // Data is approximated from the bar graph percentages.
+        // Define the data for each station based on the provided Word document
         const stationValidationData = {
-            "הקוממיות": { morning: "66%", evening: "29%", night: "4%", day: "אין מידע", lateNight: "אין מידע" },
-            "העמל": { morning: "64%", evening: "19%", night: "17%", day: "אין מידע", lateNight: "אין מידע" },
-            "כ''ט בנובמבר": { morning: "59%", evening: "20%", night: "20%", day: "אין מידע", lateNight: "אין מידע" },
-            "יוספטל": { morning: "26%", evening: "31%", night: "38%", day: "אין מידע", lateNight: "אין מידע" },
-            "בנימין": { morning: "34%", evening: "26%", night: "34%", day: "אין מידע", lateNight: "אין מידע" },
-            "בלפור": { morning: "27%", evening: "34%", night: "26%", day: "אין מידע", lateNight: "אין מידע" },
-            "ז'בוטינסקי": { morning: "34%", evening: "27%", night: "37%", day: "אין מידע", lateNight: "אין מידע" },
-            "רוטשילד": { morning: "25%", evening: "56%", night: "19%", day: "אין מידע", lateNight: "אין מידע" },
-            "העצמאות": { morning: "19%", evening: "51%", night: "25%", day: "אין מידע", lateNight: "אין מידע" },
-            "מחרוזת": { morning: "9%", evening: "47%", night: "41%", day: "אין מידע", lateNight: "אין מידע" },
-            "הבעש''ט": { morning: "8%", evening: "50%", night: "43%", day: "אין מידע", lateNight: "אין מידע" },
-            "איסקוב": { morning: "22%", evening: "28%", night: "50%", day: "אין מידע", lateNight: "אין מידע" },
-            "ארליך": { morning: "20%", evening: "28%", night: "52%", day: "אין מידע", lateNight: "אין מידע" },
-            "אצטדיון בלומפילד": { morning: "21%", evening: "53%", night: "26%", day: "אין מידע", lateNight: "אין מידע" },
-            "שלמה": { morning: "20%", evening: "52%", night: "26%", day: "אין מידע", lateNight: "אין מידע" },
-            "אליפלט": { morning: "24%", evening: "54%", night: "22%", day: "אין מידע", lateNight: "אין מידע" },
-            "אלנבי": { morning: "23%", evening: "53%", night: "24%", day: "אין מידע", lateNight: "אין מידע" },
-            "קרליבך": { morning: "25%", evening: "54%", night: "21%", day: "אין מידע", lateNight: "אין מידע" },
-            "יהודית": { morning: "24%", evening: "50%", night: "25%", day: "אין מידע", lateNight: "אין מידע" },
-            "שאול המלך": { morning: "32%", evening: "43%", night: "24%", day: "אין מידע", lateNight: "אין מידע" },
-            "ארלוזורוב": { morning: "33%", evening: "33%", night: "32%", day: "אין מידע", lateNight: "אין מידע" },
-            "אבא הלל": { morning: "32%", evening: "28%", night: "34%", day: "אין מידע", lateNight: "אין מידע" },
-            "ביאליק": { morning: "31%", evening: "30%", night: "34%", day: "אין מידע", lateNight: "אין מידע" },
-            "בן גוריון": { morning: "29%", evening: "32%", night: "35%", day: "אין מידע", lateNight: "אין מידע" },
-            "אהרונוביץ'": { morning: "31%", evening: "38%", night: "26%", day: "אין מידע", lateNight: "אין מידע" },
-            "גשר אם המושבות": { morning: "18%", evening: "31%", night: "9686%", day: "אין מידע", lateNight: "אין מידע" }, // Data seems inconsistent in report image for night
-            "קרית אריה": { morning: "20%", evening: "29%", night: "47%", day: "אין מידע", lateNight: "אין מידע" },
-            "שנקר": { morning: "17%", evening: "30%", night: "50%", day: "אין מידע", lateNight: "אין מידע" },
-            "שחם": { morning: "41%", evening: "24%", night: "33%", day: "אין מידע", lateNight: "אין מידע" },
-            "בלינסון": { morning: "27%", evening: "28%", night: "43%", day: "אין מידע", lateNight: "אין מידע" },
-            "דנקנר": { morning: "28%", evening: "28%", night: "43%", day: "אין מידע", lateNight: "אין מידע" },
-            "קרול": { morning: "27%", evening: "29%", night: "16%", day: "אין מידע", lateNight: "אין מידע" },
-            "פינסקר": { morning: "32%", evening: "529%", night: "%69", day: "אין מידע", lateNight: "אין מידע" }, // Data seems inconsistent/typo in report image
-            "תחנה מרכזית פתח תקווה": { morning: "35%", evening: "26%", night: "9%88", day: "אין מידע", lateNight: "אין מידע" }, // Data seems inconsistent/typo in report image
+            "הקוממיות": { בוקר: 42, יום: 30, ערב: 27 },
+            "העמל": { בוקר: 38, יום: 37, ערב: 24 },
+            "כ''ט בנובמבר": { בוקר: 39, יום: 34, ערב: 26 },
+            "יוספטל": { בוקר: 38, יום: 34, ערב: 27 },
+            "בנימין": { בוקר: 56, יום: 25, ערב: 19 },
+            "בלפור": { בוקר: 58, יום: 22, ערב: 19 },
+            "ז'בוטינסקי": { בוקר: 51, יום: 25, ערב: 23 },
+            "רוטשילד": { בוקר: 53, יום: 26, ערב: 20 },
+            "העצמאות": { בוקר: 52, יום: 26, ערב: 21 },
+            "מחרוזת": { בוקר: 54, יום: 25, ערב: 20 }, // Corrected name based on select options
+            "הבעש''ט": { בוקר: 50, יום: 25, ערב: 24 },
+            "איסקוב": { בוקר: 54, יום: 24, ערב: 21 },
+            "ארליך": { בוקר: 43, יום: 32, ערב: 24 },
+            "אצטדיון בלומפילד": { בוקר: 33, יום: 32, ערב: 28 }, // Corrected name based on select options
+            "שלמה": { בוקר: 34, יום: 31, ערב: 30 },
+            "אליפלט": { בוקר: 35, יום: 29, ערב: 32 },
+            "אלנבי": { בוקר: 26, יום: 31, ערב: 38 },
+            "קרליבך": { בוקר: 18, יום: 31, ערב: 48 },
+            "יהודית": { בוקר: 20, יום: 29, ערב: 47 },
+            "שאול המלך": { בוקר: 17, יום: 30, ערב: 50 },
+            "ארלוזורוב": { בוקר: 41, יום: 24, ערב: 33 }, // Corrected name based on select options
+            "אבא הלל": { בוקר: 27, יום: 28, ערב: 44 },
+            "ביאליק": { בוקר: 50, יום: 22, ערב: 26 },
+            "בן גוריון": { בוקר: 28, יום: 28, ערב: 43 },
+            "אהרונוביץ'": { בוקר: 43, יום: 27, ערב: 29 },
+            "גשר אם המושבות": { בוקר: 16, יום: 32, ערב: 52 },
+            "קרית אריה": { בוקר: 69, יום: 14, ערב: 16 }, // Corrected name based on select options
+            "שנקר": { בוקר: 35, יום: 26, ערב: 38 },
+            "שחם": { בוקר: 33, יום: 26, ערב: 39 }, // Corrected name based on select options
+            "בלינסון": { בוקר: 39, יום: 34, ערב: 26 },
+            "דנקנר": { בוקר: 67, יום: 16, ערב: 16 }, // Corrected name based on select options
+            "קרול": { בוקר: 71, יום: 15, ערב: 14 },
+            "פינסקר": { בוקר: 64, יום: 19, ערב: 17 }, // Corrected name based on select options
+            "תחנה מרכזית פתח תקווה": { בוקר: 59, יום: 20, ערב: 20 },
         };
 
         // Add an event listener to the dropdown
@@ -468,14 +467,12 @@
 
                 // Check if data exists for the selected station
                 if (data) {
-                    // Display the data in a formatted way
+                    // Display the data in a formatted way, showing only בוקר, יום, and ערב as percentages
                     stationDataArea.innerHTML = `
                         <p class="font-semibold text-lg mb-2">${selectedStation}: התפלגות תיקופים לפי שעות היום</p>
-                        <div class="data-item"><strong>בוקר (5:00-9:00):</strong> ${data.morning}</div>
-                        <div class="data-item"><strong>יום (10:00-14:00):</strong> ${data.day || 'אין מידע'}</div>
-                        <div class="data-item"><strong>אחר הצהריים (15:00-20:00):</strong> ${data.evening}</div>
-                        <div class="data-item"><strong>לילה (21:00-1:00):</strong> ${data.night}</div>
-                        <div class="data-item"><strong>מאוחר (2:00-4:00):</strong> ${data.lateNight || 'אין מידע'}</div>
+                        <div class="data-item"><strong>בוקר:</strong> ${data.בוקר}%</div>
+                        <div class="data-item"><strong>יום:</strong> ${data.יום}%</div>
+                        <div class="data-item"><strong>ערב:</strong> ${data.ערב}%</div>
                     `;
                     // Make the data box visible
                     stationDataArea.style.display = 'block';
@@ -506,7 +503,7 @@
             "תת קרקעי": "25-35 קמ''ש",
             "עילי פתח תקווה": "15-19 קמ''ש",
             "הכי מהיר (פתח תקווה)": "39 קמ''ש",
-            "הכי איתית (כניסה לתת קרקע)": "8 קמ''ש",
+            "הכי איתית (כניסה לתת קרע)": "8 קמ''ש",
             // Add data for other specific segments mentioned in the report if desired
         };
 
